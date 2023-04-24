@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
 import '../model/home_model.dart';
 import '../provider/home_provider.dart';
 
@@ -13,13 +12,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  HomeProvider? homeProviderT;
-  HomeProvider? homeProviderF;
+  HomeProvider? homeProviderTrue;
+  HomeProvider? homeProviderFalse;
 
   @override
   Widget build(BuildContext context) {
-    homeProviderT = Provider.of<HomeProvider>(context, listen: true);
-    homeProviderF = Provider.of<HomeProvider>(context, listen: false);
+    homeProviderTrue = Provider.of<HomeProvider>(context, listen: true);
+    homeProviderFalse = Provider.of<HomeProvider>(context, listen: false);
     return SafeArea(
         child: Scaffold(
           backgroundColor: Colors.black,
@@ -32,12 +31,12 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Expanded(
                 child: FutureBuilder(
-                  future: homeProviderF!.getCoronaData(),
+                  future: homeProviderFalse!.getCoronaData(),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
                       return Text("${snapshot.error}");
                     } else if (snapshot.hasData) {
-                      CoronaModel? c1 = snapshot.data;
+                      CoronaModel? deta = snapshot.data;
                       return ListView.builder(
                         itemBuilder: (context, index) {
                           return Padding(
@@ -51,31 +50,31 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(" => ${c1.worldTotal.totalCases}",style: TextStyle(color: Colors.white),),
+                                  Text(" => ${deta?.worldTotal.totalCases}",style: TextStyle(color: Colors.white),),
                                   SizedBox(height: 5,),
-                                  Text(" => ${c1!.statisticTakenAt}",style: GoogleFonts.lato(fontSize: 5),),
+                                  Text(" => ${deta!.statisticTakenAt}",style: GoogleFonts.lato(fontSize: 5),),
                                   SizedBox(height: 5,),
                                   Text(
-                                    "Country => ${c1.countriesStat[index].countryName}",style: GoogleFonts.lato(
+                                    "Country => ${deta.countriesStat[index].countryName}",style: GoogleFonts.lato(
                                     fontSize: 5,
                                   ),),
                                   SizedBox(height: 5,),
 
                                   Text(
-                                      "Active =>${c1.countriesStat[index].activeCases}",style: TextStyle(color: Colors.white),),
+                                      "Active =>${deta.countriesStat[index].activeCases}",style: TextStyle(color: Colors.white),),
                                   SizedBox(height: 5,),
                                   Text(
-                                      "Total =>${c1.countriesStat[index].cases}",style: TextStyle(color: Colors.white),),
+                                      "Total =>${deta.countriesStat[index].cases}",style: TextStyle(color: Colors.white),),
                                   SizedBox(
                                     height: 5,
                                   ),
                                   Text(
-                                      "Death => ${c1.countriesStat[index].deaths}",style: TextStyle(color: Colors.white),),
+                                      "Death => ${deta.countriesStat[index].deaths}",style: TextStyle(color: Colors.white),),
                                   SizedBox(
                                     height: 5,
                                   ),
                                   Text(
-                                      "Recoverd:${c1.countriesStat[index].totalRecovered}",style: TextStyle(color: Colors.white),),
+                                      "Recoverd:${deta.countriesStat[index].totalRecovered}",style: TextStyle(color: Colors.white),),
                                   SizedBox(
                                     height: 5,
                                   ),
@@ -84,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           );
                         },
-                        itemCount: c1!.countriesStat.length,
+                        itemCount: deta!.countriesStat.length,
                       );
                     }
                     return Container(height: 50,width: 50,
